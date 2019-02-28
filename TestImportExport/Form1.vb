@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Data.SqlClient
+Imports System.Reflection
 Imports Newtonsoft.Json
 Public Class Form1
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -14,5 +15,17 @@ Public Class Form1
             row.SetConnect(dataBase)
             MessageBox.Show(row.SaveData())
         Next
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim obj As New CCTSJob_H(mainConn)
+        Dim format As String = DateTime.Now.ToString("yyMMdd/") & "___"
+        obj.jobNo = GetMaxByMask(mainConn, "SELECT MAX(jobNo) as t FROM CTSJob_H WHERE jobNo Like '" & format & "%'", format)
+        obj.jobDate = DateTime.Now
+        obj.lastUpdate = DateTime.Now
+        obj.agentId = "TAWAN"
+        obj.companyId = "TAWAN"
+        obj.companyBranch = "0000"
+        MessageBox.Show(obj.SaveData(" WHERE Id=" & obj.Id))
     End Sub
 End Class
